@@ -8,8 +8,8 @@ const server = new ApolloServer({
   resolvers,
 });
 
-const { url } = await startStandaloneServer(server, {
+startStandaloneServer(server, {
   listen: { port: process.env.PORT ? +process.env.PORT : 4000 },
+}).then(({ url }) => {
+  console.log(`🚀  Server ready at: ${url}`);
 });
-
-console.log(`🚀  Server ready at: ${url}`);
