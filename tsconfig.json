@@ -16,6 +16,7 @@
     "noImplicitReturns": true,
     "noImplicitOverride": true,
     "allowUnreachableCode": false,
-    "types": ["node"]
+    "types": ["node"],
+    "forceConsistentCasingInFileNames": true
   }
 }

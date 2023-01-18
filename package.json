@@ -10,7 +10,9 @@
   "dependencies": {
     "@apollo/server": "^4.3.0",
     "graphql": "^16.6.0",
-    "graphql-tag": "^2.12.6"
+    "graphql-tag": "^2.12.6",
+    "mysql2": "^3.0.1",
+    "sequelize": "^6.28.0"
   },
   "scripts": {
     "build": "yarn tsc",
