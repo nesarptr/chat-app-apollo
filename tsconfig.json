@@ -15,8 +15,9 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noImplicitOverride": true,
-    "allowUnreachableCode": true,
+    "allowUnreachableCode": false,
     "types": ["node"],
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true
   }
 }

@@ -419,6 +419,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/bcryptjs@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "@types/bcryptjs@npm:2.4.2"
+  checksum: 220dade7b0312b41e23ccfb15f2ddde7804eb3c7ef41db41a6c49054be1e19a15eb3dd8c8ef196494f0866307cce22ad6f3f272941387124707d81dc66155bbc
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.2
   resolution: "@types/body-parser@npm:1.19.2"
@@ -532,7 +539,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/validator@npm:^13.7.1":
+"@types/validator@npm:^13.7.1, @types/validator@npm:^13.7.10":
   version: 13.7.10
   resolution: "@types/validator@npm:13.7.10"
   checksum: 7b142c08019f484d62c9f3074231f640c24311558f157dd253a60810dd0cb29e41ec64ca210a192b54f6de51f4fe016bfeb2c30f90fa49c9337ed54a9d8e02aa
@@ -619,6 +626,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"apollo-server-errors@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "apollo-server-errors@npm:3.3.1"
+  peerDependencies:
+    graphql: ^15.3.0 || ^16.0.0
+  checksum: d09b66e7ac3e2cbc60774280d30118ac4d98f945b5cc1013bb81b9970aae49c0717a550e161fe978d69d7039ec053aeba495890f6eebf452532a2c5e94071a80
+  languageName: node
+  linkType: hard
+
 "aproba@npm:^1.0.3 || ^2.0.0":
   version: 2.0.0
   resolution: "aproba@npm:2.0.0"
@@ -670,6 +686,13 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 9706c088a283058a8a99e0bf91b0a2f75497f185980d9ffa8b304de1d9e58ebda7c72c07ebf01dadedaac5b2907b2c6f566f660d62bd336c3468e960403b9d65
+  languageName: node
+  linkType: hard
+
+"bcryptjs@npm:^2.4.3":
+  version: 2.4.3
+  resolution: "bcryptjs@npm:2.4.3"
+  checksum: 0e80ed852a41f5dfb1853f53ee14a7390b0ef263ce05dba6e2ef3cd919dfad025a7c21ebcfe5bc7fa04b100990edf90c7a877ff7fe623d3e479753253131b629
   languageName: node
   linkType: hard
 
@@ -783,16 +806,20 @@ __metadata:
   resolution: "chat-app-apollo@workspace:."
   dependencies:
     "@apollo/server": ^4.3.0
+    "@types/bcryptjs": ^2.4.2
     "@types/node": ^18.11.18
+    "@types/validator": ^13.7.10
+    apollo-server-errors: ^3.3.1
+    bcryptjs: ^2.4.3
     graphql: ^16.6.0
     graphql-tag: ^2.12.6
-    mysql2: ^3.0.1
     nodemon: ^2.0.20
     pg: ^8.8.0
     pg-hstore: ^2.3.4
     sequelize: ^6.28.0
     ts-node: ^10.9.1
     typescript: ^4.9.4
+    validator: ^13.7.0
   languageName: unknown
   linkType: soft
 
@@ -949,13 +976,6 @@ __metadata:
   version: 1.0.0
   resolution: "delegates@npm:1.0.0"
   checksum: a51744d9b53c164ba9c0492471a1a2ffa0b6727451bdc89e31627fdf4adda9d51277cfcbfb20f0a6f08ccb3c436f341df3e92631a3440226d93a8971724771fd
-  languageName: node
-  linkType: hard
-
-"denque@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "denque@npm:2.1.0"
-  checksum: 1d4ae1d05e59ac3a3481e7b478293f4b4c813819342273f3d5b826c7ffa9753c520919ba264f377e09108d24ec6cf0ec0ac729a5686cbb8f32d797126c5dae74
   languageName: node
   linkType: hard
 
@@ -1198,15 +1218,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"generate-function@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "generate-function@npm:2.3.1"
-  dependencies:
-    is-property: ^1.0.2
-  checksum: 652f083de206ead2bae4caf9c7eeb465e8d98c0b8ed2a29c6afc538cef0785b5c6eea10548f1e13cc586d3afd796c13c830c2cb3dc612ec2457b2aadda5f57c9
-  languageName: node
-  linkType: hard
-
 "get-intrinsic@npm:^1.0.2":
   version: 1.1.3
   resolution: "get-intrinsic@npm:1.1.3"
@@ -1368,7 +1379,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:^0.6.2, iconv-lite@npm:^0.6.3":
+"iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:
@@ -1489,13 +1500,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-property@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "is-property@npm:1.0.2"
-  checksum: 33b661a3690bcc88f7e47bb0a21b9e3187e76a317541ea7ec5e8096d954f441b77a46d8930c785f7fbf4ef8dfd624c25495221e026e50f74c9048fe501773be5
-  languageName: node
-  linkType: hard
-
 "isexe@npm:^2.0.0":
   version: 2.0.0
   resolution: "isexe@npm:2.0.0"
@@ -1528,13 +1532,6 @@ __metadata:
   version: 4.0.0
   resolution: "long@npm:4.0.0"
   checksum: 16afbe8f749c7c849db1f4de4e2e6a31ac6e617cead3bdc4f9605cb703cd20e1e9fc1a7baba674ffcca57d660a6e5b53a9e236d7b25a295d3855cca79cc06744
-  languageName: node
-  linkType: hard
-
-"long@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "long@npm:5.2.1"
-  checksum: 9264da12d1b7df67e5aa6da4498144293caf1ad12e7f092efe4e9a2d32c53f0bbf7334f7cef997080a2a3af061142558ab366efa71698d98b1cdb883477445a7
   languageName: node
   linkType: hard
 
@@ -1771,31 +1768,6 @@ __metadata:
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: aa92de608021b242401676e35cfa5aa42dd70cbdc082b916da7fb925c542173e36bce97ea3e804923fe92c0ad991434e4a38327e15a1b5b5f945d66df615ae6d
-  languageName: node
-  linkType: hard
-
-"mysql2@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "mysql2@npm:3.0.1"
-  dependencies:
-    denque: ^2.1.0
-    generate-function: ^2.3.1
-    iconv-lite: ^0.6.3
-    long: ^5.2.1
-    lru-cache: ^7.14.1
-    named-placeholders: ^1.1.3
-    seq-queue: ^0.0.5
-    sqlstring: ^2.3.2
-  checksum: 3b724df78deba85fc804bba0fa6f92d85e4d311fa468da02d08edd920bd68e20fca4d371ecbc48d588d2a99a521d76a2447595d15f4c7ccd8e744eddebd3b0eb
-  languageName: node
-  linkType: hard
-
-"named-placeholders@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "named-placeholders@npm:1.1.3"
-  dependencies:
-    lru-cache: ^7.14.1
-  checksum: 7834adc91e92ae1b9c4413384e3ccd297de5168bb44017ff0536705ddc4db421723bd964607849265feb3f6ded390f84cf138e5925f22f7c13324f87a803dc73
   languageName: node
   linkType: hard
 
@@ -2273,13 +2245,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"seq-queue@npm:^0.0.5":
-  version: 0.0.5
-  resolution: "seq-queue@npm:0.0.5"
-  checksum: f8695a6cb613e1b378b9686cde4ea626944091a412fc1c9d24c5039283d4351dd115f4505e4cf103d3a2e4a9a6a72fc7698fdce703839fb1fec9627aa4ce5563
-  languageName: node
-  linkType: hard
-
 "sequelize-pool@npm:^7.1.0":
   version: 7.1.0
   resolution: "sequelize-pool@npm:7.1.0"
@@ -2427,13 +2392,6 @@ __metadata:
   version: 4.1.0
   resolution: "split2@npm:4.1.0"
   checksum: ec581597cb74c13cdfb5e2047543dd40cb1e8e9803c7b1e0c29ede05f2b4f049b2d6e7f2788a225d544549375719658b8f38e9366364dec35dc7a12edfda5ee5
-  languageName: node
-  linkType: hard
-
-"sqlstring@npm:^2.3.2":
-  version: 2.3.3
-  resolution: "sqlstring@npm:2.3.3"
-  checksum: 1e7e2d51c38a0cf7372e875408ca100b6e0c9a941ab7773975ea41fb36e5528e404dc787689be855780cf6d0a829ff71027964ae3a05a7446e91dce26672fda7
   languageName: node
   linkType: hard
 
