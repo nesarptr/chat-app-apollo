@@ -1,14 +1,16 @@
 import { Sequelize } from "sequelize";
 
-console.log(process.env.DATABASE, process.env.USER, process.env.PASSWORD);
-
 const sequelize = new Sequelize(
   process.env.DATABASE as string,
-  process.env.USER as string,
-  process.env.PASSWORD,
+  process.env.DB_USERNAME as string,
+  process.env.DB_PASSWORD,
   {
-    dialect: "mysql",
-    host: process.env.HOST,
+    dialect: "postgres",
+    port: process.env.DB_PORT ? +process.env.DB_PORT : 3306,
+    host: process.env.DB_HOST,
+    dialectOptions: {
+      ssl: false,
+    },
   }
 );
 
