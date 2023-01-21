@@ -1,7 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { JwtPayload, verify } from "jsonwebtoken";
-import { AuthenticationError } from "apollo-server-errors";
 
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
@@ -19,23 +18,26 @@ sequelize
     return startStandaloneServer(server, {
       listen: { port: process.env.PORT ? +process.env.PORT : 4000 },
       context: async ({ req }): Promise<authContext> => {
+        const ctxValue: authContext = {
+          isAuth: false,
+        };
         try {
           const token = req.headers.authorization?.split("Bearer ")[1];
-          const ctxValue: authContext = {
-            isAuth: false,
-          };
 
           if (!token) {
             return ctxValue;
           }
 
           const decoded = verify(token, process.env.JWT_SECRET as string);
-
-          ctxValue.isAuth = true;
-          ctxValue.username = (decoded as JwtPayload).username;
-          return ctxValue;
+          const { username } = decoded as JwtPayload;
+          if (username) {
+            ctxValue.isAuth = true;
+            ctxValue.username = username;
+          }
         } catch (error) {
-          throw new AuthenticationError("token is not valid");
+          console.error(error);
+        } finally {
+          return ctxValue;
         }
       },
     });
