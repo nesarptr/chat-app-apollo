@@ -13,18 +13,22 @@ import {
 } from "apollo-server-errors";
 import { sign } from "jsonwebtoken";
 
-import User from "../models/user";
-import { authContext, registerFuncArgs, loginFuncArgs } from "../utils/types";
+import User from "../../models/user";
+import {
+  authContext,
+  registerFuncArgs,
+  loginFuncArgs,
+} from "../../utils/types";
 
-export const resolvers = {
+export default {
   Query: {
-    getUsers: async (_: null, __: null, contex: authContext) => {
+    getUsers: async (_: null, __: null, { isAuth, username }: authContext) => {
       try {
-        if (!contex.isAuth) {
+        if (!isAuth) {
           throw new ForbiddenError("User is unauthorized");
         }
         const users = await User.findAll({
-          where: { username: { [Op.ne]: contex.username } },
+          where: { username: { [Op.ne]: username } },
         });
         return users.map((user) => {
           return {
