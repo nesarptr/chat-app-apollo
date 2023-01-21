@@ -1,15 +1,21 @@
-const { UserInputError, AuthenticationError } = require("apollo-server");
-const { Op } = require("sequelize");
+import { UserInputError, AuthenticationError } from "apollo-server-errors";
+import { withFilter } from "graphql-subscriptions";
+import { Op } from "sequelize";
 
-import { authContext, Message as IMessage } from "../../utils/types";
+import {
+  authContext,
+  getMessagesFuncArgs,
+  sendMessagesFuncArgs,
+} from "../../utils/types";
 import User from "../../models/user";
 import Message from "../../models/message";
+import { verify } from "jsonwebtoken";
 
 export default {
   Query: {
     getMessages: async (
       _: null,
-      { from }: IMessage,
+      { from }: getMessagesFuncArgs,
       { username, isAuth }: authContext
     ) => {
       try {
@@ -30,12 +36,7 @@ export default {
           order: [["createdAt", "DESC"]],
         });
 
-        return messages.map((message) => {
-          return {
-            ...message.toJSON(),
-            createdAt: message.dataValues.createdAt.toISOString(),
-          };
-        });
+        return messages;
       } catch (err) {
         console.error(err);
         throw err;
@@ -45,8 +46,8 @@ export default {
   Mutation: {
     sendMessage: async (
       _: null,
-      { to, content }: IMessage,
-      { username, isAuth }: authContext
+      { to, content }: sendMessagesFuncArgs,
+      { username, isAuth, pubsub }: authContext
     ) => {
       try {
         if (!isAuth) throw new AuthenticationError("User is not Authenticated");
@@ -69,14 +70,30 @@ export default {
           content,
         });
 
-        return {
-          ...message.toJSON(),
-          createdAt: message.dataValues.createdAt.toISOString(),
-        };
+        pubsub?.publish("NEW_MESSAGE", { newMessage: message });
+
+        return message;
       } catch (err) {
         console.error(err);
         throw err;
       }
+    },
+  },
+  Subscription: {
+    newMessage: {
+      subscribe: withFilter(
+        (_, __, { pubsub, username, token }) => {
+          try {
+            verify(token, process.env.JWT_SECRET as string);
+            if (!username) throw new Error();
+            return pubsub.asyncIterator(["NEW_MESSAGE"]);
+          } catch (error) {
+            throw new AuthenticationError("User is not Authenticated");
+          }
+        },
+        ({ newMessage }, _, { username }) =>
+          newMessage.from === username || newMessage.to === username
+      ),
     },
   },
 };

@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 
 import sequelize from "../config/database";
 
-const Message = sequelize.define("user", {
+const Message = sequelize.define("message", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

@@ -1,5 +1,9 @@
+import { PubSub } from "graphql-subscriptions/dist/pubsub";
+
 export interface authContext {
   isAuth: boolean;
+  token?: string;
+  pubsub?: PubSub;
   username?: string;
 }
 
@@ -14,17 +18,28 @@ export type loginFuncArgs = {
   password: string;
 };
 
-export interface Message {
+export type getMessagesFuncArgs = {
+  content: string;
+  from: string;
+  to: string;
+};
+
+export type sendMessagesFuncArgs = {
+  content: string;
+  to: string;
+};
+
+export interface IUser {
+  username: string;
+  email: string;
+  createdAt: Date;
+  token?: string;
+}
+
+export interface IMessage {
   uuid: string;
   content: string;
   from: string;
   to: string;
-  createdAt: string;
-}
-
-export interface User {
-  username: string;
-  email: string;
-  createdAt: string;
-  token?: string;
+  createdAt: Date;
 }

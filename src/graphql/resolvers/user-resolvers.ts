@@ -13,6 +13,7 @@ import {
 } from "apollo-server-errors";
 import { sign } from "jsonwebtoken";
 
+import Message from "../../models/message";
 import User from "../../models/user";
 import {
   authContext,
@@ -27,16 +28,32 @@ export default {
         if (!isAuth) {
           throw new ForbiddenError("User is unauthorized");
         }
-        const users = await User.findAll({
+        let users = await User.findAll({
           where: { username: { [Op.ne]: username } },
         });
-        return users.map((user) => {
+
+        const allUserMessages = await Message.findAll({
+          where: {
+            [Op.or]: [{ from: username }, { to: username }],
+          },
+          order: [["createdAt", "DESC"]],
+        });
+
+        users = users.map((otherUser) => {
+          const latestMessage = allUserMessages.find((m) => {
+            console.log(m.dataValues);
+            return (
+              m.dataValues.from === otherUser.dataValues.username ||
+              m.dataValues.to === otherUser.dataValues.username
+            );
+          });
           return {
-            ...user.toJSON(),
-            createdAt: user.dataValues.createdAt.toISOString(),
-            token: null,
+            ...otherUser.dataValues,
+            latestMessage: latestMessage,
           };
         });
+
+        return users;
       } catch (err) {
         console.error(err);
         throw err;
@@ -71,7 +88,6 @@ export default {
 
         return {
           ...user.toJSON(),
-          createdAt: user.dataValues.createdAt.toISOString(),
           token,
         };
       } catch (error) {

@@ -1,4 +1,5 @@
 import { ApolloServer } from "@apollo/server";
+import { PubSub } from "graphql-subscriptions";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { JwtPayload, verify } from "jsonwebtoken";
 
@@ -6,6 +7,8 @@ import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import sequelize from "./config/database";
 import { authContext } from "./utils/types";
+
+const pubsub = new PubSub();
 
 const server = new ApolloServer<authContext>({
   typeDefs,
@@ -33,6 +36,8 @@ sequelize
           if (username) {
             ctxValue.isAuth = true;
             ctxValue.username = username;
+            ctxValue.pubsub = pubsub;
+            ctxValue.token = token;
           }
         } catch (error) {
           console.error(error);
