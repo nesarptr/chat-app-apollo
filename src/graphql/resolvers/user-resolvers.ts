@@ -41,7 +41,6 @@ export default {
 
         users = users.map((otherUser) => {
           const latestMessage = allUserMessages.find((m) => {
-            console.log(m.dataValues);
             return (
               m.dataValues.from === otherUser.dataValues.username ||
               m.dataValues.to === otherUser.dataValues.username
