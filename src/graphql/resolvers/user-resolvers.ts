@@ -15,11 +15,7 @@ import { sign } from "jsonwebtoken";
 
 import Message from "../../models/message";
 import User from "../../models/user";
-import {
-  authContext,
-  registerFuncArgs,
-  loginFuncArgs,
-} from "../../utils/types";
+import { authContext, registerFuncArgs, loginFuncArgs } from "../../types";
 
 export default {
   Query: {

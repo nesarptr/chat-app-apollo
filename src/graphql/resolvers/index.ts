@@ -1,6 +1,6 @@
 import userResolvers from "./user-resolvers";
 import messageResolvers from "./message-resolvers";
-import { IUser, IMessage } from "../../utils/types";
+import { IUser, IMessage } from "../../types";
 
 export const resolvers = {
   User: {

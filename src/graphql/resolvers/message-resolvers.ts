@@ -6,7 +6,7 @@ import {
   authContext,
   getMessagesFuncArgs,
   sendMessagesFuncArgs,
-} from "../../utils/types";
+} from "../../types";
 import User from "../../models/user";
 import Message from "../../models/message";
 import { verify } from "jsonwebtoken";

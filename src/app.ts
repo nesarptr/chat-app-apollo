@@ -6,7 +6,7 @@ import { JwtPayload, verify } from "jsonwebtoken";
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import sequelize from "./config/database";
-import { authContext } from "./utils/types";
+import { authContext } from "./types";
 
 const pubsub = new PubSub();
 
