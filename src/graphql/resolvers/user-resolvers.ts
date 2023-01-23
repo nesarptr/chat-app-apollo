@@ -10,7 +10,7 @@ import {
   UserInputError,
   AuthenticationError,
   ForbiddenError,
-} from "apollo-server-errors";
+} from "apollo-server";
 import { sign } from "jsonwebtoken";
 
 import Message from "../../models/message";

@@ -1,5 +1,4 @@
-import { UserInputError, AuthenticationError } from "apollo-server-errors";
-import { withFilter } from "graphql-subscriptions";
+import { UserInputError, AuthenticationError, withFilter } from "apollo-server";
 import { Op } from "sequelize";
 
 import {
@@ -9,7 +8,6 @@ import {
 } from "../../types";
 import User from "../../models/user";
 import Message from "../../models/message";
-import { verify } from "jsonwebtoken";
 
 export default {
   Query: {
@@ -82,14 +80,11 @@ export default {
   Subscription: {
     newMessage: {
       subscribe: withFilter(
-        (_, __, { pubsub, username, token }) => {
-          try {
-            verify(token, process.env.JWT_SECRET as string);
-            if (!username) throw new Error();
-            return pubsub.asyncIterator(["NEW_MESSAGE"]);
-          } catch (error) {
+        (_, __, { pubsub, username }) => {
+          if (!username) {
             throw new AuthenticationError("User is not Authenticated");
           }
+          return pubsub.asyncIterator(["NEW_MESSAGE"]);
         },
         ({ newMessage }, _, { username }) =>
           newMessage.from === username || newMessage.to === username

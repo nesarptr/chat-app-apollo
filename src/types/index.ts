@@ -1,4 +1,4 @@
-import { PubSub } from "graphql-subscriptions/dist/pubsub";
+import { PubSub } from "apollo-server";
 
 export interface authContext {
   isAuth: boolean;

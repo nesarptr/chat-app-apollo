@@ -1,6 +1,5 @@
-import { ApolloServer } from "@apollo/server";
-import { PubSub } from "graphql-subscriptions";
-import { startStandaloneServer } from "@apollo/server/standalone";
+import { ApolloServer } from "apollo-server";
+import { PubSub } from "apollo-server";
 import { JwtPayload, verify } from "jsonwebtoken";
 
 import { typeDefs } from "./graphql/schema";
@@ -10,42 +9,40 @@ import { authContext } from "./types";
 
 const pubsub = new PubSub();
 
-const server = new ApolloServer<authContext>({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req, connection }) => {
+    const ctxValue: authContext = {
+      isAuth: false,
+    };
+    try {
+      const token =
+        req?.headers?.authorization?.split("Bearer ")[1] ||
+        connection?.context?.authorization.split("Bearer ")[1];
+      if (!token) {
+        return ctxValue;
+      }
+      const decoded = verify(token, process.env.JWT_SECRET as string);
+      const { username } = decoded as JwtPayload;
+      if (username) {
+        ctxValue.isAuth = true;
+        ctxValue.username = username;
+        ctxValue.pubsub = pubsub;
+        ctxValue.token = token;
+      }
+    } catch (error) {
+      // console.error(error);
+    } finally {
+      return ctxValue;
+    }
+  },
 });
 
 sequelize
   .sync()
   .then(() => {
-    return startStandaloneServer(server, {
-      listen: { port: process.env.PORT ? +process.env.PORT : 4000 },
-      context: async ({ req }): Promise<authContext> => {
-        const ctxValue: authContext = {
-          isAuth: false,
-        };
-        try {
-          const token = req.headers.authorization?.split("Bearer ")[1];
-
-          if (!token) {
-            return ctxValue;
-          }
-
-          const decoded = verify(token, process.env.JWT_SECRET as string);
-          const { username } = decoded as JwtPayload;
-          if (username) {
-            ctxValue.isAuth = true;
-            ctxValue.username = username;
-            ctxValue.pubsub = pubsub;
-            ctxValue.token = token;
-          }
-        } catch (error) {
-          console.error(error);
-        } finally {
-          return ctxValue;
-        }
-      },
-    });
+    return server.listen();
   })
   .then(({ url }) => {
     console.log(`🚀  Server ready at: ${url}`);
