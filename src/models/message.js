@@ -1,6 +1,6 @@
-import { DataTypes } from "sequelize";
+const { DataTypes } = require("sequelize");
 
-import sequelize from "../config/database";
+const sequelize = require("../config/database");
 
 const Message = sequelize.define("message", {
   id: {
@@ -28,4 +28,4 @@ const Message = sequelize.define("message", {
   },
 });
 
-export default Message;
+module.exports = Message;

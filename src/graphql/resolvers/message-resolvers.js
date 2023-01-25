@@ -1,23 +1,13 @@
-import { UserInputError, AuthenticationError } from "apollo-server-errors";
-import { withFilter } from "graphql-subscriptions";
-import { Op } from "sequelize";
+const { UserInputError, AuthenticationError } = require("apollo-server");
+const { withFilter } = require("apollo-server");
+const { Op } = require("sequelize");
 
-import {
-  authContext,
-  getMessagesFuncArgs,
-  sendMessagesFuncArgs,
-} from "../../types";
-import User from "../../models/user";
-import Message from "../../models/message";
-import { verify } from "jsonwebtoken";
+const User = require("../../models/user");
+const Message = require("../../models/message");
 
-export default {
+module.exports = {
   Query: {
-    getMessages: async (
-      _: null,
-      { from }: getMessagesFuncArgs,
-      { username, isAuth }: authContext
-    ) => {
+    getMessages: async (_, { from }, { username, isAuth }) => {
       try {
         if (!isAuth) throw new AuthenticationError("User is not Authenticated");
 
@@ -44,11 +34,7 @@ export default {
     },
   },
   Mutation: {
-    sendMessage: async (
-      _: null,
-      { to, content }: sendMessagesFuncArgs,
-      { username, isAuth, pubsub }: authContext
-    ) => {
+    sendMessage: async (_, { to, content }, { username, isAuth, pubsub }) => {
       try {
         if (!isAuth) throw new AuthenticationError("User is not Authenticated");
 
@@ -82,14 +68,10 @@ export default {
   Subscription: {
     newMessage: {
       subscribe: withFilter(
-        (_, __, { pubsub, username, token }) => {
-          try {
-            verify(token, process.env.JWT_SECRET as string);
-            if (!username) throw new Error();
-            return pubsub.asyncIterator(["NEW_MESSAGE"]);
-          } catch (error) {
-            throw new AuthenticationError("User is not Authenticated");
-          }
+        (_, __, { pubsub, username }) => {
+          if (!username)
+            throw new AuthenticationError("user is not authenticated");
+          return pubsub.asyncIterator(["NEW_MESSAGE"]);
         },
         ({ newMessage }, _, { username }) =>
           newMessage.from === username || newMessage.to === username

@@ -1,25 +1,20 @@
-import {
-  UniqueConstraintError,
-  ValidationError,
-  Error as SQLError,
-  Op,
-} from "sequelize";
-import isEmail from "validator/lib/isEmail";
-import bcrypt from "bcryptjs";
-import {
+// @ts-nocheck
+const { Op } = require("sequelize");
+const isEmail = require("validator/lib/isEmail");
+const bcrypt = require("bcryptjs");
+const {
   UserInputError,
   AuthenticationError,
   ForbiddenError,
-} from "apollo-server-errors";
-import { sign } from "jsonwebtoken";
+} = require("apollo-server");
+const { sign } = require("jsonwebtoken");
 
-import Message from "../../models/message";
-import User from "../../models/user";
-import { authContext, registerFuncArgs, loginFuncArgs } from "../../types";
+const Message = require("../../models/message");
+const User = require("../../models/user");
 
-export default {
+module.exports = {
   Query: {
-    getUsers: async (_: null, __: null, { isAuth, username }: authContext) => {
+    getUsers: async (_, __, { isAuth, username }) => {
       try {
         if (!isAuth) {
           throw new ForbiddenError("User is unauthorized");
@@ -54,7 +49,7 @@ export default {
         throw err;
       }
     },
-    login: async (_: null, { username, password }: loginFuncArgs) => {
+    login: async (_, { username, password }) => {
       try {
         if (!username?.trim() || username.trim().length < 2) {
           throw new UserInputError("Bad username");
@@ -77,7 +72,7 @@ export default {
           throw new AuthenticationError("username or password is not valid");
         }
 
-        const token = sign({ username }, process.env.JWT_SECRET as string, {
+        const token = sign({ username }, process.env.JWT_SECRET, {
           expiresIn: 60 * 60,
         });
 
@@ -92,10 +87,7 @@ export default {
     },
   },
   Mutation: {
-    register: async (
-      _: null,
-      { username, email, password }: registerFuncArgs
-    ) => {
+    register: async (_, { username, email, password }) => {
       try {
         if (!isEmail(email)) {
           throw new Error("Invalid Email");
@@ -119,15 +111,14 @@ export default {
       } catch (err) {
         // console.error(err);
         let error = new Error();
-        const e = err as Error | SQLError;
-        if (e.name === "SequelizeUniqueConstraintError") {
-          const { errors } = e as UniqueConstraintError;
+        if (err.name === "SequelizeUniqueConstraintError") {
+          const { errors } = err;
           error.message = errors[0].path + " is Already taken";
-        } else if (e.name === "SequelizeValidationError") {
-          const { errors } = e as ValidationError;
+        } else if (err.name === "SequelizeValidationError") {
+          const { errors } = err;
           error.message = errors[0].path + " is not valid";
         } else {
-          error.message = e.message;
+          error.message = err.message;
         }
         throw new UserInputError(error.message, { errors: error });
       }

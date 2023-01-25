@@ -1,6 +1,7 @@
-import { gql } from "graphql-tag";
+// @ts-nocheck
+const { gql } = require("apollo-server");
 
-export const typeDefs = gql`
+exports.typeDefs = gql`
   type User {
     username: String!
     email: String!
