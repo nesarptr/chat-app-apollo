@@ -15,7 +15,7 @@
     "validator": "^13.7.0"
   },
   "scripts": {
-    "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   }
 }
