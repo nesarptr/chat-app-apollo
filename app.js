@@ -6,6 +6,9 @@ const { typeDefs } = require("./graphql/schema");
 const { resolvers } = require("./graphql/resolvers");
 const sequelize = require("./config/database");
 
+const HOST = process.env.HOSTNAME || "localhost";
+const PORT = +process.env.PROT || 4000;
+
 const pubsub = new PubSub();
 
 const server = new ApolloServer({
@@ -42,7 +45,7 @@ const server = new ApolloServer({
 sequelize
   .sync()
   .then(() => {
-    return server.listen();
+    return server.listen({ port: PORT, hostname: HOST });
   })
   .then(({ url }) => {
     console.log(`🚀  Server ready at: ${url}`);
